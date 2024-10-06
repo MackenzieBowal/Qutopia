@@ -11,16 +11,27 @@ from pulser_pasqal import PasqalCloud
 import os
 import pulser
 
+B = 6.56
+# B = 9.62
+
 def run (input_data, solver_params,extra_arguments):
     coords = input_data["points"]
-    # bird_radius = input_data["bird_radius"]
-    qubits = dict(enumerate([[v * bird_radius for v in c] for c in coords]))
-    reg = Register(qubits)
-    
+    rB = input_data["bird_radius"]
+
+    print(f"Bird radius: {rB}")
+
     Omega = 2 * np.pi
     delta_0 = -5  # just has to be negative
     delta_f = -delta_0  # just has to be positive
     T = 16000  # time in ns, we choose a time long enough to ensure the propagation of information in the system
+    
+    B = DigitalAnalogDevice.rydberg_blockade_radius(Omega)
+
+    print(B)
+    
+    qubits = dict(enumerate([[v / rB * B for v in c] for c in coords]))
+    reg = Register(qubits)
+    
     adiabatic_pulse = Pulse(
         InterpolatedWaveform(T, [1e-9, Omega, 1e-9]),
         InterpolatedWaveform(T, [delta_0, 0, delta_f]),

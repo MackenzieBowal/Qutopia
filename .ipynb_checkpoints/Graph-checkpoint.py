@@ -23,7 +23,7 @@ class Graph():
             vertices_temp.pop(vertex1)
             for vertex2 in vertices_temp:
                 v2 = vertices_temp[vertex2]
-                if (np.linalg.norm(np.array(v1) - np.array(v2)) < self.radius/2):
+                if (np.linalg.norm(np.array(v1) - np.array(v2)) < self.radius):
                     edges.append((vertex1, vertex2))
         self.edges = copy.deepcopy(edges)
         
